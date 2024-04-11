@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Big Data Project</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<header>
+  <nav class="text-center">
+    <ul class="inline-block">
+      <li class="pull-left active"><a href="#" data-direction="front">Home</a></li>
+      <li class="pull-left"><a href="#" data-direction="back">Application</a></li>
+      <li class="pull-left"><a href="#" data-direction="top">Resources</a></li>
+      <li class="pull-left"><a href="#" data-direction="right">Members</a></li>
+      <div class="clearfix"></div>
+    </ul>
+  </nav>
+</header>
+<div id="wrap">
+  <div class="cube">
+    <section class="page active face front" id="home">
+      <div class="act-table text-center">
+        <div class="act-table-cell ver-middle">Data in Motion</div>
+      </div>
+    </section>
+    <section class="page face back" id="Application">
+
+      <div class="vehicle-selection">
+        <div class="make-model-container">
+          <h3>Select Make</h3>
+          <select id="make-list">
+            <option value="">Select a make</option>
+          </select>
+        </div>
+        <div class="make-model-container">
+          <h3>Select Model</h3>
+          <select id="model-list" disabled>
+            <option value="">Select a model</option>
+          </select>
+        </div>
+        <button id="generate-btn" disabled>Generate Result</button>
+      </div>
+      
+      <div id="result" class="result-section" style="display: none;">
+        <h3>Result</h3>
+        <p id="result-text"></p>
+      </div>
+
+    
+    </section>
+    <section class="page face top" id="Resources">
+      <div class="resources-container">
+  <div class="resource-section">
+    <h2>Academic Papers</h2>
+    <ul>
+      <li><a href="https://www.ibm.com/topics/linear-regression">What is Linear Regression |IBM</a></li>
+      <li><a href="https://ieeexplore.ieee.org/document/9696839">Price Prediction of Used Cars Using ML | IEEE Publication</a></li>
+      </ul>
+  </div>
+  
+  <div class="resource-section">
+    <h2>Data Sets</h2>
+    <ul>
+      <li><a href="https://www.edmunds.com/car-reviews/">Vehicle Reviews</a></li>
+      <li><a href="https://www.kaggle.com/datasets/syedanwarafridi/vehicle-sales-data?resource=download">Vehicle Sales Data
+      </a></li>
+      </ul>
+  </div>
+  </div>
+  
+  </section>
+  
+    <section class="page face right" id="contact">
+      <div class="act-table text-center">
+        <div class="act-table-cell ver-middle">Daniel Mc Dougall</div>
+        <div class="act-table-cell ver-middle">Myah Small</div>
+        <div class="act-table-cell ver-middle">Elizabeth Halls</div>
+        
+      </div>
+    </section>
+    <section class="page face bottom" id="blog">
+      <div class="act-table text-center">
+        <div class="act-table-cell ver-middle">blog Page</div>
+      </div>
+    </section>
+    <section class="page face left" id="article">
+      <div class="act-table text-center">
+        <div class="act-table-cell ver-middle">article Page</div>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script><script  src="./script.js"></script>
+  <script>
+    // Dummy data for demonstration
+    const vehicleData = {
+      "Toyota": ["Camry", "Corolla", "Rav4"],
+      "Honda": ["Civic", "Accord", "CR-V"],
+      // Add more make-model data as needed
+    };
+    
+    // Function to populate model options based on selected make
+    function populateModels() {
+      const makeSelect = document.getElementById("make-list");
+      const modelSelect = document.getElementById("model-list");
+      const selectedMake = makeSelect.value;
+      
+      // Clear previous options
+      modelSelect.innerHTML = '<option value="">Select a model</option>';
+      
+      if (selectedMake !== "") {
+        const models = vehicleData[selectedMake];
+        models.forEach(model => {
+          const option = document.createElement("option");
+          option.text = model;
+          option.value = model;
+          modelSelect.appendChild(option);
+        });
+        modelSelect.disabled = false;
+      } else {
+        modelSelect.disabled = true;
+      }
+    }
+    
+    // Function to generate result
+    function generateResult() {
+      const makeSelect = document.getElementById("make-list");
+      const modelSelect = document.getElementById("model-list");
+      const selectedMake = makeSelect.value;
+      const selectedModel = modelSelect.value;
+      
+      if (selectedMake !== "" && selectedModel !== "") {
+        // Perform processing based on selected make and model
+        const resultText = `You selected ${selectedMake} ${selectedModel}. Result generated!`;
+        document.getElementById("result-text").textContent = resultText;
+        document.getElementById("result").style.display = "block";
+      }
+    }
+    
+    // Function to update generate button state
+    function updateGenerateButton() {
+      const makeSelect = document.getElementById("make-list");
+      const modelSelect = document.getElementById("model-list");
+      const generateBtn = document.getElementById("generate-btn");
+      generateBtn.disabled = makeSelect.value === "" || modelSelect.value === "";
+    }
+    
+    // Populate initial make options
+    window.onload = function() {
+      const makeSelect = document.getElementById("make-list");
+      for (const make in vehicleData) {
+        const option = document.createElement("option");
+        option.text = make;
+        option.value = make;
+        makeSelect.appendChild(option);
+      }
+      
+      // Bind onchange event to make selection
+      makeSelect.onchange = function() {
+        populateModels();
+        updateGenerateButton();
+      };
+      
+      // Bind onchange event to model selection
+      document.getElementById("model-list").onchange = updateGenerateButton;
+      
+      // Bind click event to generate button
+      document.getElementById("generate-btn").onclick = generateResult;
+    };
+    </script>
+    
+</body>
+
+
+</html>
